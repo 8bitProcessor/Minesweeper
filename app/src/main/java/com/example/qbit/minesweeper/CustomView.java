@@ -9,10 +9,16 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.util.Random;
+
 /**
  * Created by qbit on 27/03/15.
  */
 public class CustomView extends View {
+    private static final int mine=3;
+
+
+
     private Paint black, grey, white, blue, green, yellow, red;
     private Rect square;
     private int[][] gameTable;
@@ -21,8 +27,8 @@ public class CustomView extends View {
     private float touchy[];
     private int first;
     private boolean touch;
-    private double cellwidth,cellheight;
-    private int viewHeight, viewWidth;
+    private int cell;
+    private int heightWidth;
     public CustomView(Context context) {
         super(context);
         init();
@@ -41,6 +47,8 @@ public class CustomView extends View {
         black.setStyle(Paint.Style.FILL_AND_STROKE);
         grey = new Paint(Paint.ANTI_ALIAS_FLAG);
         white = new Paint(Paint.ANTI_ALIAS_FLAG);
+        white.setStyle(Paint.Style.STROKE);
+        white.setStrokeWidth((float) 2.0);
         blue = new Paint(Paint.ANTI_ALIAS_FLAG);
         green = new Paint(Paint.ANTI_ALIAS_FLAG);
         yellow = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -52,53 +60,29 @@ public class CustomView extends View {
         green.setColor(0xff00ff00);
         yellow.setColor(0xffffff00);
         red.setColor(0xFFFF0000);
-        square = new Rect(-100,-100,100,100);
+
     }
     //On measure method to calculate the size of the square
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        int desiredWidth = 300;
-        int desiredHeight = 300;
-        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
-        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
-        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
-        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
-        int height;
-        int width;
-        if (widthMode == MeasureSpec.EXACTLY) {
-            width = widthSize;
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int width = MeasureSpec.getSize(widthMeasureSpec);
+        int height = MeasureSpec.getSize(heightMeasureSpec);
+        int size = width > height ? height : width;
+        setMeasuredDimension(size, size);
+        cell = size/10;
+        heightWidth = height;
 
-        } else if (widthMode == MeasureSpec.AT_MOST) {
-            width = Math.min(desiredWidth, widthSize);
-        } else {
-            width = desiredWidth;
-        }
-        if (heightMode == MeasureSpec.EXACTLY) {
-            height = heightSize;
-        } else if (heightMode == MeasureSpec.AT_MOST) {
-            height = Math.min(desiredHeight, heightSize);
-        } else {
-            height = desiredHeight;
-        }
-        cellwidth= widthSize/10;
-        cellheight=heightSize/10;
-        viewHeight= height;
-        viewWidth = width;
-        setMeasuredDimension(width, height);
     }
     @Override
     public void onDraw(Canvas canvas){
         super.onDraw(canvas);
-        int cw = (int)Math.floor(cellwidth);
-        int ch= (int)Math.floor(cellheight);
-        int offsetX =(viewWidth - cw*10)/2;
-        int offsetY = (viewHeight - ch*10)/2;
         for (int x=0; x<10; x++){
             for (int i=0; i<10; i++){
-                int dx = x*cw+offsetX;
-                int dy= i*ch+offsetY;
-                canvas.drawRect(new Rect(dx+1,dy+1, dx+cw-2,dy+ch-2),black);
+                canvas.save();
+                canvas.translate(cell*x,cell*i);
+                canvas.drawRect(new Rect(0,0, cell,cell),black);
+                canvas.drawRect(new Rect(0,0, cell,cell),white);
+                canvas.restore();
             }
         }
     }
@@ -108,7 +92,11 @@ public class CustomView extends View {
 
     }
     public void resetGame(){
-
+        gameTable = new int[10][10];
+        for (int i=0; i<20; i++){
+            Random rand = new Random();
+            
+        }
 
 
 
