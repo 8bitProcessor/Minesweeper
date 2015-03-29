@@ -60,7 +60,7 @@ public class CustomView extends View {
         green.setColor(0xff00ff00);
         yellow.setColor(0xffffff00);
         red.setColor(0xFFFF0000);
-
+        resetGame();
     }
     //On measure method to calculate the size of the square
     @Override
@@ -93,11 +93,22 @@ public class CustomView extends View {
     }
     public void resetGame(){
         gameTable = new int[10][10];
-        for (int i=0; i<20; i++){
-            Random rand = new Random();
-            
-        }
+        Random rand = new Random();
+        int counter=0;
+        while(counter<0){
+            int x = rand.nextInt();
+            int y = rand.nextInt();
+            if(gameTable[x][y]==0){
+                gameTable[x][y]=3;
+                counter++;
+            }
+            else if(gameTable[x][y]!=0){
+                 //do nothing
+            }
 
+
+        }
+        
 
 
 
